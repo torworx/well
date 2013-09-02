@@ -1,14 +1,14 @@
 {
-  "name": "will",
+  "name": "well",
   "version": "0.0.1-1",
   "description": "A fast, elegant, flexible Promises/A+ implementation.",
-  "main": "will",
+  "main": "well",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/**/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/torworx/will.git"
+    "url": "https://github.com/torworx/well.git"
   },
   "keywords": [
     "promise",
@@ -19,7 +19,7 @@
   "author": "Tao Yuan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/torworx/will/issues"
+    "url": "https://github.com/torworx/well/issues"
   },
   "devDependencies": {
     "chai": "~1.7.2",

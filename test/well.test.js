@@ -1,5 +1,5 @@
 
-var will = require('../');
+var well = require('../');
 var t = require('chai').assert;
 require('chai').Assertion.includeStack = true;
 
@@ -22,27 +22,27 @@ function FakePromise(val) {
     };
 }
 
-describe('will', function () {
+describe('well', function () {
 
     it('should return a promise for a value', function () {
-        var result = will(1);
+        var result = well(1);
         t.isFunction(result.then);
     });
 
 
     it('should return a promise for a promise', function() {
-        var result = will(fakePromise);
+        var result = well(fakePromise);
         t.isFunction(result.then);
     });
 
     it('should not return the input promise', function() {
-        var result = will(fakePromise, identity);
+        var result = well(fakePromise, identity);
         t.isFunction(result.then);
         t.notStrictEqual(result, fakePromise);
     });
 
     it('should return a promise that forwards for a value', function() {
-        var result = will(1, constant(2));
+        var result = well(1, constant(2));
 
         t.isFunction(result.then);
 
@@ -58,7 +58,7 @@ describe('will', function () {
         var val = other;
 
         try {
-            return will({}, function() {
+            return well({}, function() {
                 t.strictEqual(val, sentinel);
             });
         } finally {
@@ -70,7 +70,7 @@ describe('will', function () {
         var val = other;
 
         try {
-            return will(fakePromise, function() {
+            return well(fakePromise, function() {
                 t.strictEqual(val, sentinel);
             });
         } finally {
@@ -82,7 +82,7 @@ describe('will', function () {
         var val = other;
 
         try {
-            return will(will.resolve(), function() {
+            return well(well.resolve(), function() {
                 t.strictEqual(val, sentinel);
             });
         } finally {
@@ -94,7 +94,7 @@ describe('will', function () {
         var val = other;
 
         try {
-            will(will.reject(),
+            well(well.reject(),
                 t.fail, function() { t.strictEqual(val, sentinel); }
             );
         } finally {
@@ -105,13 +105,13 @@ describe('will', function () {
     it('should support deep nesting in promise chains', function() {
         var d, result;
 
-        d = will.defer();
+        d = well.defer();
         d.resolve(false);
 
-        result = will(will(d.promise.then(function(val) {
-            var d = will.defer();
+        result = well(well(d.promise.then(function(val) {
+            var d = well.defer();
             d.resolve(val);
-            return will(d.promise.then(identity), identity).then(
+            return well(d.promise.then(identity), identity).then(
                 function(val) {
                     return !val;
                 }

@@ -1,6 +1,6 @@
+require('./init');
 var well = require('../');
 var t = require('chai').assert;
-require('chai').Assertion.includeStack = true;
 
 var fakePromise, sentinel, other;
 function identity(val) {
@@ -163,6 +163,7 @@ describe('well', function () {
     });
 
     it('should assimilate intermediate promises returned by callbacks', function (done) {
+        var plan = t.plan(2, done);
         var result;
 
         // untrusted promise returned by an intermediate
@@ -174,13 +175,13 @@ describe('well', function () {
         ).then(
             function (val) {
                 t.strictEqual(val, 2);
-                done();
+                plan.check();
             },
             t.fail
         );
 
         t.notOk(result instanceof FakePromise);
-
+        plan.check();
     });
 
     it('should assimilate intermediate promises and forward results', function (done) {

@@ -115,7 +115,6 @@ describe('well', function () {
         });
     });
 
-
     it('should support deep nesting in promise chains', function (done) {
         var d, result;
 
@@ -132,7 +131,7 @@ describe('well', function () {
             );
         })));
 
-        result.done(
+        result.then(
             function (val) {
                 t.ok(val);
                 done();
@@ -140,5 +139,75 @@ describe('well', function () {
             t.fail
         );
     });
+
+
+    it('should return a resolved promise for a resolved input promise', function(done) {
+        return well(well.resolve(true)).then(
+            function(val) {
+                t.ok(val);
+                done();
+            },
+            t.fail
+        );
+    });
+
+    it('should assimilate untrusted promises', function () {
+        var untrusted, result;
+
+        // unstrusted promise should never be returned by well()
+        untrusted = new FakePromise();
+        result = well(untrusted);
+
+        t.notEqual(result, untrusted);
+        t.notOk(result instanceof FakePromise);
+    });
+
+    it('should assimilate intermediate promises returned by callbacks', function (done) {
+        var result;
+
+        // untrusted promise returned by an intermediate
+        // handler should be assimilated
+        result = well(1,
+            function (val) {
+                return new FakePromise(val + 1);
+            }
+        ).then(
+            function (val) {
+                t.strictEqual(val, 2);
+                done();
+            },
+            t.fail
+        );
+
+        t.notOk(result instanceof FakePromise);
+
+    });
+
+    it('should assimilate intermediate promises and forward results', function (done) {
+        var untrusted, result;
+
+        untrusted = new FakePromise(1);
+
+        result = well(untrusted, function (val) {
+            return new FakePromise(val + 1);
+        });
+
+        t.notEqual(result, untrusted);
+        t.notOk(result instanceof FakePromise);
+
+        return well(result,
+            function (val) {
+                t.strictEqual(val, 2);
+                return new FakePromise(val + 1);
+            }
+        ).then(
+            function (val) {
+                t.strictEqual(val, 3);
+                done();
+            },
+            t.fail
+        );
+    });
+
 
 });

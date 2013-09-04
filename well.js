@@ -2,20 +2,21 @@
 
 module.exports = well;
 
-var promise, resolve, reject, isPromise, undef;
+var promise, resolve, reject, isPromise, isWellPromise, undef;
 
-var _promise = makeWellCore(require('./lib/promise'), {
+var $promise = makeWellCore(require('./lib/promise'), {
     throwUncaughtError : true
 });
 
-well.promise = promise = _promise.promise;
-well.resolve = resolve = _promise.resolve;
-well.reject = reject = _promise.reject;
+well.promise = promise = $promise.promise;
+well.resolve = resolve = $promise.resolve;
+well.reject = reject = $promise.reject;
 well.defer = defer;
 
-well.isPromise = isPromise = _promise.isPromise;
+well.isPromise = isPromise = $promise.isPromise;
+well.isWellPromise = isWellPromise = $promise.isWellPromise;
 
-well.extend = _promise.extend;
+well.extend = $promise.extend;
 
 function makeWellCore(makePromise, options) {
     return makePromise(options).extend({

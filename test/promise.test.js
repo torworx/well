@@ -424,7 +424,7 @@ describe('well/promise-test', function () {
                     d.promise.then(
                         null,
                         function () {
-                            throw sentinel;
+                            throw new Error;
                         }
                     );
 
@@ -709,4 +709,55 @@ describe('well/promise-test', function () {
 
     });
 
+
+    describe('inspect', function () {
+
+        describe('when inspecting promises', function () {
+            it('should return pending state for pending promise', function() {
+                var promise = well.promise(function() {});
+
+                assertPending(promise.inspect());
+            });
+
+            it('should return fulfilled state for fulfilled promise', function() {
+                var promise = well.resolve(sentinel);
+
+                return promise.then(function() {
+                    assertFulfilled(promise.inspect(), sentinel);
+                });
+            });
+
+            it('should return rejected state for rejected promise', function() {
+                var promise = well.reject(sentinel);
+
+                return promise.then(t.fail, function() {
+                    assertRejected(promise.inspect(), sentinel);
+                });
+            });
+        });
+
+        describe('when inspecting thenables', function () {
+            it('should return pending state for pending thenable', function() {
+                var p = well({ then: function() {} });
+
+                assertPending(p.inspect());
+            });
+
+            it('should return fulfilled state for fulfilled thenable', function() {
+                var p = well({ then: function(fulfill) { fulfill(sentinel); } });
+
+                return p.then(function() {
+                    assertFulfilled(p.inspect(), sentinel);
+                });
+            });
+
+            it('should return rejected state for rejected thenable', function() {
+                var p = well({ then: function(_, rejected) { rejected(sentinel); } });
+
+                return p.then(t.fail, function() {
+                    assertRejected(p.inspect(), sentinel);
+                });
+            });
+        });
+    });
 });

@@ -4,7 +4,9 @@ module.exports = well;
 
 var promise, resolve, reject, isPromise, undef;
 
-var _promise = makeWellCore(require('./lib/promise'));
+var _promise = makeWellCore(require('./lib/promise'), {
+    throwUncaughtError : true
+});
 
 well.promise = promise = _promise.promise;
 well.resolve = resolve = _promise.resolve;
@@ -15,20 +17,8 @@ well.isPromise = isPromise = _promise.isPromise;
 
 well.extend = _promise.extend;
 
-function makeWellCore(makePromise) {
-    return makePromise({
-        // Throw error if no reject handler register on the end.
-        throwUncaughtError: true
-    }).extend({
-        /**
-         * Applies f to the promise's eventual value.
-         * @param {function} f function to apply
-         * @returns {Promise} promise for the return value of applying f
-         *  to this promise's value
-         */
-        map: function (f) {
-            return this.then(f);
-        },
+function makeWellCore(makePromise, options) {
+    return makePromise(options).extend({
 
         /**
          * Register a rejection handler.  Shortcut for .then(undefined, onRejected)
@@ -37,6 +27,14 @@ function makeWellCore(makePromise) {
          */
         otherwise: function (onRejected) {
             return this.then(undef, onRejected);
+        },
+
+        /**
+         * Register a rejection handler.  Shortcut for .then(undefined, onRejected)
+         * @param {function?} onRejected
+         */
+        otherwise$: function (onRejected) {
+            return this.done(undef, onRejected);
         },
 
         /**
@@ -51,6 +49,23 @@ function makeWellCore(makePromise) {
          */
         ensure: function (onFulfilledOrRejected) {
             return this.then(injectHandler, injectHandler)['yield'](this);
+
+            function injectHandler() {
+                return onFulfilledOrRejected();
+            }
+        },
+
+        /**
+         * Ensures that onFulfilledOrRejected will be called regardless of whether
+         * this promise is fulfilled or rejected.  onFulfilledOrRejected WILL NOT
+         * receive the promises' value or reason.  Any returned value will be disregarded.
+         * onFulfilledOrRejected may throw or return a rejected promise to signal
+         * an additional error.
+         * @param {function} onFulfilledOrRejected handler to be called regardless of
+         *  fulfillment or rejection
+         */
+        ensure$: function (onFulfilledOrRejected) {
+            return this.done(injectHandler, injectHandler);
 
             function injectHandler() {
                 return onFulfilledOrRejected();
@@ -101,6 +116,31 @@ function makeWellCore(makePromise) {
          */
         cb: function (cb) {
             return this.then(function (value) {
+                cb(null, value);
+            }, function (err) {
+                cb(err);
+            });
+        },
+
+        /**
+         * Handles asynchronous function style callback (which is run in next event loop
+         * the earliest). Returns self promise. Callback is optional.
+         *
+         * Useful when we want to configure typical asynchronous function which logic is
+         * internally configured with promises.
+         *
+         * Extension can be used as follows:
+         *
+         * var foo = function (arg1, arg2, cb) {
+         *     var d = well.defer();
+         *     // ... implementation
+         *     return d.promise.cb(cb);
+         * };
+         *
+         * @param {Function} cb extension returns promise and handles eventual callback (optional)
+         */
+        cb$: function (cb) {
+            return this.done(function (value) {
                 cb(null, value);
             }, function (err) {
                 cb(err);

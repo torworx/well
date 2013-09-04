@@ -11,14 +11,14 @@ suite
     .add('direct', function () {
         addOne(1);
     })
-    .add('resolve', function () {
+    .add('then', function () {
         var d = well.defer();
         d.promise.then(addOne);
         d.resolve(1);
     })
-    .add('reject', function () {
+    .add('done', function () {
         var d = well.defer();
-        d.promise.then(addOne);
+        d.promise.done(addOne);
         d.reject(1);
     })
 // add listeners

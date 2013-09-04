@@ -17,7 +17,8 @@ well.extend = _promise.extend;
 
 function makeWellCore(makePromise) {
     return makePromise({
-        // placeholder for options
+        // Throw error if no reject handler register on the end.
+        throwUncaughtError: true
     }).extend({
         /**
          * Applies f to the promise's eventual value.

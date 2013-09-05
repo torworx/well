@@ -1,10 +1,10 @@
-var Suite = require('../suite');
+var Benchmark = require('../benchmark');
 var vendors = require('../vendors');
 var lstat = require('fs').lstat;
 
-var suite = Suite('lstat-sequence');
+var benchmark = Benchmark('lstat-sequence');
 
-suite.add('Base (plain Node.js lstat call)', function (count, complete) {
+benchmark.add('Base (plain Node.js lstat call)', function (count, complete) {
     execute();
     function execute() {
         lstat(__filename, function (err, stats) {
@@ -18,13 +18,13 @@ suite.add('Base (plain Node.js lstat call)', function (count, complete) {
 });
 
 Object.keys(vendors).forEach(function (name) {
-    suite.add(name, executeWithThen(vendors[name]));
+    benchmark.add(name, executeWithThen(vendors[name]));
     if (vendors[name].defer().promise.done) {
-        suite.add(name + ' done()', executeWithDone(vendors[name]));
+        benchmark.add(name + ' done()', executeWithDone(vendors[name]));
     }
 });
 
-suite.run(10000);
+benchmark.run(10000);
 
 function vendor_dlstat(vendor) {
     return function (path) {

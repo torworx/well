@@ -1,16 +1,17 @@
-var Suite = require('../suite');
+var Benchmark = require('../benchmark');
 var vendors = require('../vendors');
 
-var suite = Suite('defer-reject');
+var benchmark = Benchmark('defer-reject');
 
 Object.keys(vendors).forEach(function (name) {
-    suite.add(name, executeWithThen(vendors[name]));
-    if (vendors[name].defer().promise.done) {
-        suite.add(name + ' done()', executeWithDone(vendors[name]));
-    }
+    benchmark.add(name, executeWithThen(vendors[name]));
+    // Deferred reject a uncaught error will throw
+//    if (vendors[name].defer().promise.done) {
+//        benchmark.add(name + ' done()', executeWithDone(vendors[name]));
+//    }
 });
 
-suite.run(10000);
+benchmark.run(10000);
 
 var err = new Error();
 function executeWithThen(vendor) {

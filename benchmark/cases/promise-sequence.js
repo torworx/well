@@ -1,7 +1,7 @@
-var Suite = require('../suite');
+var Benchmark = require('../benchmark');
 var vendors = require('../vendors');
 
-var suite = Suite('promise-sequence');
+var benchmark = Benchmark('promise-sequence');
 
 var i, array, iterations;
 iterations = 10000;
@@ -12,10 +12,10 @@ for (i = 1; i < iterations; i++) {
 }
 
 Object.keys(vendors).forEach(function (name) {
-    suite.add(name, executeWithThen(name, vendors[name]));
+    benchmark.add(name, executeWithThen(name, vendors[name]));
 });
 
-suite.run();
+benchmark.run(1, 10);
 
 function executeWithThen(name, vendor) {
     return function (count, done) {

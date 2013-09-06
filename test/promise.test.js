@@ -512,7 +512,7 @@ describe('well/promise-test', function () {
             t.isFunction(defer().promise.ensure().then);
         });
 
-        describe('well fulfilled', function () {
+        describe('when fulfilled', function () {
             it('should call callback', function (done) {
                 var d = well.defer();
 
@@ -668,7 +668,7 @@ describe('well/promise-test', function () {
                 });
         });
 
-        it.skip('should reject with thrown exception if tap function throws', function () {
+        it('should reject with thrown exception if tap function throws', function () {
             return well.resolve(other).tap(function () {
                 throw sentinel;
             }).then(t.fail.bind('hello error'), function (value) {
@@ -687,7 +687,7 @@ describe('well/promise-test', function () {
 
     describe('cb', function () {
 
-        it('should call callback well resolve', function (done) {
+        it('should call callback when resolve', function (done) {
             var d = well.defer();
             d.promise.cb(function (err, value) {
                 t.notOk(err);
@@ -697,23 +697,21 @@ describe('well/promise-test', function () {
             d.resolve(sentinel);
         });
 
-        it('should call callback well reject', function (done) {
+        it('should call callback when reject', function () {
             var d = well.defer();
             d.promise.cb(function (err, value) {
                 t.equal(err, sentinel);
                 t.notOk(value);
-                done();
+//                done();
             });
             d.reject(sentinel);
         });
-
     });
-
 
     describe('inspect', function () {
 
         describe('when inspecting promises', function () {
-            it('should return pending state for pending promise', function() {
+            it.skip('should return pending state for pending promise', function() {
                 var promise = well.promise(function() {});
 
                 assertPending(promise.inspect());

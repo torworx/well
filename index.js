@@ -1,6 +1,6 @@
 var well = require('./lib/well');
-var utils = require('./lib/utils');
+//var utils = require('./lib/utils');
 
 module.exports = well;
 
-utils.merge(well, require('./lib/well-array'));
+//utils.merge(well, require('./lib/well-array'));

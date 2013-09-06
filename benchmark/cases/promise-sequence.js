@@ -4,7 +4,7 @@ var vendors = require('../vendors');
 var benchmark = Benchmark('promise-sequence');
 
 var i, array, iterations;
-iterations = 10000;
+iterations = 100000;
 
 array = [];
 for (i = 1; i < iterations; i++) {
@@ -15,7 +15,7 @@ Object.keys(vendors).forEach(function (name) {
     benchmark.add(name, executeWithThen(name, vendors[name]));
 });
 
-benchmark.run(1, 10);
+benchmark.run(1);
 
 function executeWithThen(name, vendor) {
     return function (count, done) {

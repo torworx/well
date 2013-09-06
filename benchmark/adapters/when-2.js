@@ -6,6 +6,7 @@ exports.defer = function () {
     return {
         promise: deferred.promise,
         fulfill: deferred.resolve,
+        resolve: deferred.resolve,
         reject: deferred.reject
     };
 };
@@ -13,5 +14,6 @@ exports.defer = function () {
 exports.fulfilled = when.resolve;
 exports.rejected = when.reject;
 
+exports.all = when.all;
 exports.map = when.map;
 exports.reduce = when.reduce;

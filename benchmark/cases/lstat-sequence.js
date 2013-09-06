@@ -18,7 +18,7 @@ benchmark.add('Base (plain Node.js lstat call)', function (count, complete) {
 });
 
 Object.keys(vendors).forEach(function (name) {
-    benchmark.add(name, executeWithThen(vendors[name]));
+    benchmark.add(name, execute(vendors[name]));
     if (vendors[name].defer().promise.done) {
         benchmark.add(name + ' done()', executeWithDone(vendors[name]));
     }
@@ -40,7 +40,7 @@ function vendor_dlstat(vendor) {
     };
 }
 
-function executeWithThen(vendor) {
+function execute(vendor) {
     var dlstat = vendor_dlstat(vendor);
     return function (count, complete) {
         execute();

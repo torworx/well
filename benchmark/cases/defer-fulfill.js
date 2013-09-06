@@ -4,7 +4,7 @@ var vendors = require('../vendors');
 var benchmark = Benchmark('defer-fulfill');
 
 Object.keys(vendors).forEach(function (name) {
-    benchmark.add(name, executeWithThen(vendors[name]));
+    benchmark.add(name, execute(vendors[name]));
     if (vendors[name].defer().promise.done) {
         benchmark.add(name + ' done()', executeWithDone(vendors[name]));
     }
@@ -12,7 +12,7 @@ Object.keys(vendors).forEach(function (name) {
 
 benchmark.run(10000);
 
-function executeWithThen(vendor) {
+function execute(vendor) {
     return function () {
         var d = vendor.defer();
         d.promise.then(addOne);

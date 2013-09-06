@@ -1,7 +1,8 @@
 var vendors = [];
-vendors.push('when-1.8.1');
 vendors.push('well');
-vendors.push('when');
+vendors.push('when-1.8.1');
+vendors.push('when-2');
+
 vendors.push('deferred');
 vendors.push('q');
 

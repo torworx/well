@@ -6,9 +6,12 @@ exports.defer = function () {
     return {
         promise: deferred.promise,
         fulfill: deferred.resolve,
+        resolve: deferred.resolve,
         reject: deferred.reject
     };
 };
 
 exports.fulfilled = well.resolve;
 exports.rejected = well.reject;
+
+exports.all = well.all;

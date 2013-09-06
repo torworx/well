@@ -11,3 +11,5 @@ npm-debug.log
 .git
 .idea
 jasmine*.js
+benchmark
+test

@@ -7,4 +7,4 @@ Well.js is lightweight [Promises/A+](http://promises-aplus.github.com/promises-s
 * Native cancelable deferred
 * Throw exception for uncaught error
 
-It is [very fast]() and compact, and has no external dependencies.
+It is [very fast](https://github.com/torworx/promise-benchmark#test-results) and compact, and has no external dependencies.

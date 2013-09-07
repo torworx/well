@@ -14,13 +14,13 @@ runTest promise-sequence.js
 # Deferred basics
 runTest defer-create.js
 runTest defer-fulfill.js
-#runTest defer-reject.js
-#runTest defer-sequence.js
+runTest defer-reject.js
+runTest defer-sequence.js
 
 # Higher order operations, if supported
-#runTest map.js
-#runTest reduce-small.js
-#runTest reduce-large.js
+runTest map.js
+runTest reduce-small.js
+runTest reduce-large.js
 
 runTest thanpolas.js
 

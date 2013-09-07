@@ -7,12 +7,12 @@ Object.keys(vendors).forEach(function (name) {
     benchmark.add(name, execute(vendors[name]));
 });
 
-benchmark.run(10000);
+benchmark.run(10000, 10);
 
 function execute(vendor) {
     return function () {
         var d = vendor.defer();
-        d.promise.then(addOne);
+        d.promise.then(addOne, noop);
         d.reject();
     }
 }
@@ -20,3 +20,5 @@ function execute(vendor) {
 function addOne(x) {
     return x + 1;
 }
+
+function noop() {}

@@ -88,7 +88,7 @@ function initialize(options) {
                 results.forEach(function (test, index) {
                     var diff = helper.difference(results[0]._mean, test._mean);
                     console.log(helper.columns([
-                        index + 1 + ':' + test.name,
+                        index + 1 + '. ' + test.name,
                         helper.formatNumber(test._mean, 0),
                         helper.formatNumber(diff, 2)
                     ], sizes));
@@ -111,7 +111,7 @@ function initialize(options) {
                     results.forEach(function (test, index) {
                         var diff = helper.difference(results[0]._total, test._total);
                         console.log(helper.columns([
-                            index + 1 + ':' + test.name,
+                            index + 1 + '. ' + test.name,
                             helper.formatNumber(test._total, 0),
                             helper.formatNumber(diff, 2)
                         ], sizes));

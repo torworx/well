@@ -2,7 +2,7 @@
   "name": "well",
   "version": "0.0.2-1",
   "description": "A fast, elegant, flexible Promises/A+ implementation.",
-  "main": "index",
+  "main": "well",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/**/*.test.js"
   },
@@ -27,6 +27,7 @@
     "benit": "~0.0.1",
     "lodash": "~1.3.1",
     "profy": "0.0.5",
-    "optimist": "~0.6.0"
+    "optimist": "~0.6.0",
+    "numeral": "~1.5.0"
   }
 }

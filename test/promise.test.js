@@ -712,7 +712,7 @@ describe('well/promise-test', function () {
 
         describe('when inspecting promises', function () {
             it('should return pending state for pending promise', function() {
-                var promise = well.defer().promise;
+                var promise = well.promise(function() {});
 
                 assertPending(promise.inspect());
             });

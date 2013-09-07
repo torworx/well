@@ -15,3 +15,5 @@ exports.fulfilled = well.resolve;
 exports.rejected = well.reject;
 
 exports.all = well.all;
+exports.map = well.map;
+exports.reduce = well.reduce;

@@ -2,7 +2,7 @@ var Benchmark = require('../benchmark');
 var vendors = require('../vendors');
 
 var i, array, iterations = 10000;
-var benchmark = Benchmark('promise-sequence x ' + iterations);
+var benchmark = Benchmark('defer-sequence x ' + iterations);
 
 array = [];
 for (i = 1; i < iterations; i++) {
@@ -16,7 +16,10 @@ Object.keys(vendors).forEach(function (name) {
 benchmark.run(1, 20);
 
 function execute(name, vendor) {
+
     return function (count, done) {
+        var d = vendor.defer();
+        d.fulfill(0);
         // Use reduce to chain <iteration> number of promises back
         // to back.  The final result will only be computed after
         // all promises have resolved
@@ -24,8 +27,10 @@ function execute(name, vendor) {
             return promise.then(function (currentVal) {
                 // Uncomment if you want progress indication:
 //                if (nextVal % 1000 === 0) console.log(name, nextVal);
-                return vendor.fulfilled(currentVal + nextVal);
+                var d = vendor.defer();
+                d.fulfill(currentVal + nextVal);
+                return d.promise;
             });
-        }, vendor.fulfilled(0)).then(done);
+        }, d.promise).then(done);
     }
 }

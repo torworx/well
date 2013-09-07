@@ -1,6 +1,6 @@
 {
   "name": "well",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A fast, elegant, flexible Promises/A+ implementation.",
   "main": "well",
   "scripts": {
@@ -24,6 +24,7 @@
   "devDependencies": {
     "chai": "~1.7.2",
     "mocha": "~1.12.1",
-    "promises-aplus-tests": "*"
+    "promises-aplus-tests": "*",
+    "benit": "0.0.1-4"
   }
 }

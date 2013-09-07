@@ -135,7 +135,7 @@
                 fulfilled: fulfilled,
                 rejected: rejected,
                 isResolved: isResolved,
-                isFulfilled: isRejected,
+                isFulfilled: isFulfilled,
                 isRejected: isRejected,
                 fulfill: fulfill,
                 reject: reject,
@@ -407,9 +407,6 @@
                 }
             }
 
-            handlers = [];
-            progressHandlers = [];
-
             function hasHandlers() {
                 return handlers && handlers.length > 0;
             }
@@ -442,6 +439,7 @@
                         d.notify(update);
                     };
 
+                if (!handlers) handlers = [];
                 handlers.push(function (promise) {
                     var p = promise.then(onFulfilled, onRejected);
                     // Throw unhandled exception.
@@ -449,6 +447,7 @@
                     return p.then(d.resolve, d.reject, progressHandler);
                 });
 
+                if (!progressHandlers) progressHandlers = [];
                 progressHandlers.push(progressHandler);
 
                 return d.promise;
@@ -795,6 +794,7 @@
          * @param {*} value argument passed to each function
          */
         function processQueue(queue, value) {
+            if (!queue || queue.length === 0) return;
             var handler, i = 0;
 
             while (handler = queue[i++]) {

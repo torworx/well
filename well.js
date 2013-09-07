@@ -1,5 +1,6 @@
-(function (define, global) {
-    'use strict';
+"use strict";
+
+(function (define) {
     define(function () {
 
         var reduceArray, slice, undef, states;
@@ -15,6 +16,9 @@
         well.defer = defer;     // Create a deferred
         well.resolve = resolve;   // Create a resolved promise
         well.reject = reject;    // Create a rejected promise
+
+        well.fulfilled = fulfilled;
+        well.rejected = rejected;
 
         well.join = join;      // Join 2 or more promises
 
@@ -71,7 +75,7 @@
 
             } else if (isPromiseLike(promiseOrValue)) {
                 // Assimilate foreign promises
-                promise = assimilate(promiseOrValue);
+                promise = coerce(promiseOrValue);
             } else {
                 // It's a value, create a fulfilled promise for it.
                 promise = fulfilled(promiseOrValue);
@@ -90,7 +94,7 @@
          * @param {function} thenable.then
          * @returns {Promise}
          */
-        function assimilate(thenable) {
+        function coerce(thenable) {
             var d = defer();
 
             // TODO: Enqueue this for future execution in 2.0
@@ -784,9 +788,9 @@
             );
         }
 
-        //
-        // Utility functions
-        //
+//
+// Utility functions
+//
 
         /**
          * Apply all functions in queue to value
@@ -833,9 +837,9 @@
 
         slice = [].slice;
 
-        // ES5 reduce implementation if native not available
-        // See: http://es5.github.com/#x15.4.4.21 as there are many
-        // specifics and edge cases.
+// ES5 reduce implementation if native not available
+// See: http://es5.github.com/#x15.4.4.21 as there are many
+// specifics and edge cases.
         reduceArray = [].reduce ||
             function (reduceFunc /*, initialValue */) {
                 /*jshint maxcomplexity: 7*/
@@ -903,16 +907,20 @@
         // Prefer setImmediate, cascade to node, vertx and finally setTimeout
         if (typeof setImmediate === 'function') {
             nextTick = setImmediate.bind(global);
-        } else if(typeof MessageChannel !== 'undefined') {
+        } else if (typeof MessageChannel !== 'undefined') {
             var channel = new MessageChannel();
             channel.port1.onmessage = drainQueue;
-            nextTick = function() { channel.port2.postMessage(0); };
+            nextTick = function () {
+                channel.port2.postMessage(0);
+            };
         } else if (typeof process === 'object' && process.nextTick) {
             nextTick = process.nextTick;
         } else if (typeof vertx === 'object') {
             nextTick = vertx.runOnLoop;
         } else {
-            nextTick = function(t) { setTimer(t, 0); };
+            nextTick = function (t) {
+                setTimer(t, 0);
+            };
         }
 
         /**
@@ -921,7 +929,7 @@
          * @param {function} task
          */
         function enqueue(task) {
-            if(handlerQueue.push(task) === 1) {
+            if (handlerQueue.push(task) === 1) {
                 nextTick(drainQueue);
             }
         }
@@ -934,14 +942,15 @@
         function drainQueue() {
             var task, i = 0;
 
-            while(task = handlerQueue[i++]) {
+            while (task = handlerQueue[i++]) {
                 task();
             }
 
             handlerQueue = [];
         }
 
-
         return well;
+
     });
-})(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(); }, this);
+
+})( typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(); } );

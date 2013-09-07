@@ -3,7 +3,7 @@
 require('./init');
 var t = require('chai').assert;
 var fn = require('../function');
-var well = require('../well');
+var well = require('../');
 
 var fail, slice, sentinel;
 
@@ -17,7 +17,7 @@ describe('well/function-test', function () {
 
     function assertIsPromise(something) {
         var message = 'Object is not a promise';
-        t.ok(well.isPromise(something), message);
+        t.ok(well.isPromiseLike(something), message);
     }
 
     function functionThatThrows(error) {

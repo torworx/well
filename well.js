@@ -27,7 +27,7 @@
 
         well.chain = chain;     // Make a promise trigger another resolver
 
-        well.isPromise = isPromise; // Determine if a thing is a promise
+        well.isPromiseLike = isPromiseLike; // Determine if a thing is a promise
 
         /**
          * Register an observer for a promise or immediate value.
@@ -69,7 +69,7 @@
                 // It's a well.js promise, so we trust it
                 promise = promiseOrValue;
 
-            } else if (isPromise(promiseOrValue)) {
+            } else if (isPromiseLike(promiseOrValue)) {
                 // Assimilate foreign promises
                 promise = assimilate(promiseOrValue);
             } else {
@@ -533,7 +533,7 @@
          * @param {*} promiseOrValue anything
          * @returns {boolean} true if promiseOrValue is a {@link Promise}
          */
-        function isPromise(promiseOrValue) {
+        function isPromiseLike(promiseOrValue) {
             return promiseOrValue && typeof promiseOrValue.then === 'function';
         }
 
